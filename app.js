@@ -1,603 +1,503 @@
 var express = require("express");
 var app = express();
 app.use(express.json());
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  );  
+  res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
   next();
 });
-const port = 2410;
-const pageSize = 5;
-let id = 745;
-let persons = [
-  {
-    id: "1",
-    name: "Jack Smith",
-    age: 28,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "2",
-    name: "Bob Kelley",
-    age: 37,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "3",
-    name: "Amit Gupta",
-    age: 29,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "6",
-    name: "Mary Stevens",
-    age: 30,
-    city: "London",
-    company: "Facebook",
-  },
-  {
-    id: "8",
-    name: "Dave Burton",
-    age: 31,
-    city: "Paris",
-    company: "Tesla",
-  },
-  {
-    id: "11",
-    name: "Pradeep Kumar",
-    age: 43,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "16",
-    name: "Tim Jonas",
-    age: 47,
-    city: "London",
-    company: "Microsoft",
-  },
-  {
-    id: "18",
-    name: "Julia Martins",
-    age: 34,
-    city: "Paris",
-    company: "Apple",
-  },
-  {
-    id: "21",
-    name: "Payal Sethi Gupta",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "25",
-    name: "Anita Burton",
-    age: 34,
-    city: "London",
-    company: "Google",
-  },
-  {
-    id: "34",
-    name: "George Matthews",
-    age: 26,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "28",
-    name: "Vish Talwar",
-    age: 46,
-    city: "New Delhi",
-    company: "Amazon",
-  },
-  {
-    id: "41",
-    name: "Pooja Kaur",
-    age: 25,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "51",
-    name: "John Bundy",
-    age: 27,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "52",
-    name: "Anna Matthews",
-    age: 39,
-    city: "Paris",
-    company: "Google",
-  },
-  {
-    id: "53",
-    name: "Pankaj Gupta",
-    age: 32,
-    city: "New Delhi",
-    company: "Facebook",
-  },
-  {
-    id: "56",
-    name: "Kathy Graham",
-    age: 34,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "58",
-    name: "Tony Fullerton",
-    age: 36,
-    city: "Paris",
-    company: "Amazon",
-  },
-  {
-    id: "61",
-    name: "Smita Kumar",
-    age: 38,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "76",
-    name: "Harry Smith",
-    age: 41,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "78",
-    name: "Amy Martins",
-    age: 27,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "81",
-    name: "Richa Singh",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "95",
-    name: "Boris Thompson",
-    age: 43,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "94",
-    name: "John Major",
-    age: 36,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "88",
-    name: "Ashish Talwar",
-    age: 57,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "121",
-    name: "T Ashwin",
-    age: 40,
-    city: "Bangalore",
-    company: "Google",
-  },
-  {
-    id: "145",
-    name: "Steve Paine",
-    age: 31,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "167",
-    name: "David Cummins",
-    age: 42,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "172",
-    name: "Rishabh Gupta",
-    age: 34,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "176",
-    name: "Serena Stevens",
-    age: 25,
-    city: "London",
-    company: "Facebook",
-  },
-  {
-    id: "184",
-    name: "Lionel Burton",
-    age: 27,
-    city: "Paris",
-    company: "Tesla",
-  },
-  {
-    id: "211",
-    name: "Navdeep Kumar",
-    age: 40,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "216",
-    name: "Joe Harris",
-    age: 45,
-    city: "London",
-    company: "Microsoft",
-  },
-  {
-    id: "218",
-    name: "Angela Smith",
-    age: 33,
-    city: "Paris",
-    company: "Apple",
-  },
-  {
-    id: "321",
-    name: "Neha Sehgal",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "225",
-    name: "Margaret B",
-    age: 35,
-    city: "London",
-    company: "Google",
-  },
-  {
-    id: "234",
-    name: "Harry Seldon",
-    age: 28,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "428",
-    name: "Maya Iyer",
-    age: 49,
-    city: "New Delhi",
-    company: "Amazon",
-  },
-  {
-    id: "441",
-    name: "Anita Sood",
-    age: 29,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "151",
-    name: "Donald Jr.",
-    age: 32,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "252",
-    name: "Timothy Matthews",
-    age: 45,
-    city: "Paris",
-    company: "Google",
-  },
-  {
-    id: "435",
-    name: "Umesh Gupta",
-    age: 26,
-    city: "New Delhi",
-    company: "Facebook",
-  },
-  {
-    id: "286",
-    name: "Stephanie Graham",
-    age: 29,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "158",
-    name: "Charles Bush",
-    age: 32,
-    city: "Paris",
-    company: "Amazon",
-  },
-  {
-    id: "261",
-    name: "Sonia Aiyer",
-    age: 35,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "576",
-    name: "Edwards Smith",
-    age: 39,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "378",
-    name: "Ken Rosewel",
-    age: 26,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "281",
-    name: "Rohit Jain",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "295",
-    name: "Michael Fox",
-    age: 44,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "194",
-    name: "Viktor Major",
-    age: 38,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "688",
-    name: "Joy Sharma",
-    age: 54,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "721",
-    name: "Pranay Bansal",
-    age: 37,
-    city: "Bangalore",
-    company: "Google",
-  },
-];
-let products = [
-  {
-    id: "A101",
-    name: "Pepsi 300ml",
-    price: 20,
-  },
-  {
-    id: "A232",
-    name: "Diet Coke 300ml",
-    price: 25,
-  },
-  {
-    id: "A102",
-    name: "Pepsi 500ml",
-    price: 40,
-  },
-  {
-    id: "A237",
-    name: "Coke 1l",
-    price: 75,
-  },
-  {
-    id: "B034",
-    name: "Fruit and Nuts - 40g",
-    price: 15,
-  },
-  {
-    id: "B035",
-    name: "Crackles - 100g",
-    price: 45,
-  },
-  {
-    id: "B036",
-    name: "Nutties - 20g",
-    price: 10,
-  },
-  {
-    id: "B173",
-    name: "25gm bar",
-    price: 35,
-  },
-];
-let users = [
-  { username: "Emp101", password: "Emp101", name: "Jack Smith", role: "user" },
-  { username: "Emp107", password: "Emp107", name: "Mary Gomes", role: "user" },
-  { username: "Emp211", password: "Emp211", name: "Anna Steve", role: "admin" },
-  { username: "Emp218", password: "Emp218", name: "Bob Jenner", role: "admin" },
-];
+const port= 2461;
 
-app.get("/productApp/products", function (req, res) {
-  res.send(products);
-});
-app.get("/productApp/users", function (req, res) {
-  let users1 = users.map((u) => ({
-    username: u.username,
-    name: u.name,
-    role: u.role,
-  }));
-  res.send(users1);
-});
-app.post("/productApp/products", (req, res) => {
-  const product = req.body;
-  let prod = products.find((pr) => pr.id === product.id);
-  if (!prod) {
-    products.push(product);
-    console.log(product);
-    res.send(product);
-  } else res.status(400).send("Product Id already exists");
-});
-app.post("/productApp/users", (req, res) => {
-  const user = req.body;
-  let u1 = users.find((u) => u.username === user.username);
-  if (!u1) {
-    users.push(user);
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.status(400).send("Username already exists");
-});
-app.post("/productApp/login", (req, res) => {
-  const details = req.body;
-  let user = users.find(
-    (u1) => u1.username === details.username && u1.password === details.password
-  );
-  if (user) {
-    let u1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(u1);
-  } else res.status(400).send("Invalid username or password");
-});
-app.get("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = products.find((obj1) => obj1.id === id);
-  obj ? res.send(obj) : res.send("not found");
-});
-app.put("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  const product = req.body;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    products[index] = product;
-    res.send(product);
-  } else res.send("not found");
-});
-app.delete("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let product = products.splice(index, 1);
-    res.send(product);
-  } else res.send("not found");
-});
-app.put("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  const user = req.body;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    users[index] = user;
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.send("not found");
-});
-app.delete("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    let user = users.splice(index, 1);
-    res.send("User deleted");
-  } else res.send("not found");
-});
-
-app.get("/personApp/persons", function (req, res) {
-  let page = req.query.page ? +req.query.page : 1;
-  let city = req.query.city;
-  let company = req.query.company;
-  let data1 = persons;
-  data1 = filterParam(data1, "city", city);
-  data1 = filterParam(data1, "company", company);
-  res.send(makeData(page, pageSize, data1));
-});
-
-app.post("/personApp/persons", (req, res) => {
-  const person = req.body;
-  person.id = id + 1;
-  id = id + 1;
-  persons.push(person);
-  res.send(person);
-});
-
-let makeData = (pageNum, size, data1) => {
-  let startIndex = (pageNum - 1) * size;
-  let endIndex =
-    data1.length > startIndex + size - 1
-      ? startIndex + size - 1
-      : data1.length - 1;
-  let data2 = data1.filter(
-    (lt, index) => index >= startIndex && index <= endIndex
-  );
-  let dataFull = {
-    startIndex: data1.length > 0 ? startIndex + 1 : startIndex,
-    endIndex: data1.length > 0 ? endIndex + 1 : endIndex,
-    numOfItems: data1.length,
-    data: data2,
-  };
-  return dataFull;
-};
-
-let filterParam = (arr, name, values) => {
-  if (!values) return arr;
-  let valuesArr = values.split(",");
-  let arr1 = arr.filter((a1) => valuesArr.find((val) => val === a1[name]));
-  return arr1;
-};
-
-app.get("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = persons.find((obj1) => obj1.id === id);
-  if (obj) res.send(obj);
-  res.send("not found");
-});
-
-app.get("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let user = users.find((obj1) => obj1.username === username);
-  user ? res.send(user) : res.send("not found");
-});
-
-app.put("/personApp/persons/:id", function (req, res) {
-  console.log("Put called");
-  let id = req.params.id;
-  const person = req.body;
-  console.log(id, person);
-  let updatedPerson = { id: id, ...person };
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    persons[index] = updatedPerson;
-    res.send(updatedPerson);
-  } else res.send("not found");
-});
-
-app.delete("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let person = persons.splice(index, 1);
-    res.send(person);
+let customers = [
+  {
+    custId: 1,
+    name: "ABC",
+    password: "abc1234",
+    role: "admin",
+    email: "abc@gmail.com"
+  },
+  {
+    custId: 2,
+    name: "Willie",
+    password: "willie1234",
+    role: "student",
+    email: "willie@gmail.com"
+  },
+  {
+    custId: 3,
+    name: "Jack",
+    password: "jack1234",
+    role: "faculty",
+    email: "jack@gmail.com"
+  },
+  {
+    custId: 4,
+    name: "James",
+    password: "james1234",
+    role: "student",
+    email: "james@gmail.com"
+  },
+  {
+    custId: 5,
+    name: "Harry",
+    password: "harry1234",
+    role: "faculty",
+    email: "harry@gmail.com"
+  },
+  {
+    custId: 6,
+    name: "Tia",
+    password: "tia1234",
+    role: "student",
+    email: "tia@gmail.com"
+  },
+  {
+    custId: 7,
+    name: "Aditya",
+    password: "aditya123",
+    role: "faculty",
+    email: "aditya@gmail.com"
+  },
+  {
+    custId: 8,
+    name: "Sonu",
+    password: "sonu1234",
+    role: "student",
+    email: "sonu@gmail.com"
+  },
+  {
+    custId: 9,
+    name: "Ellie",
+    password: "ellie1234",
+    role: "student",
+    email: "ellie@gmail.com"
+  },
+  {
+    custId: 10,
+    name: "Gia",
+    password: "gia1234",
+    role: "faculty",
+    email: "gia@gmail.com"
   }
-  res.send("not found");
+];
+let courses = [
+  {
+    courseId: 1,
+    name: "ANGULAR",
+    code: "ANG97",
+    description: "All fundamentals of Angular 7",
+    faculty: ["Daniel", "Jack"],
+    students: ["Sam"]
+  },
+  {
+    courseId: 2,
+    name: "JAVASCRIPT",
+    code: "JS124",
+    description: "Intoduction to javascript",
+    faculty: ["Aditya"],
+    students: ["James", "Joy", "Monu", "Rita"]
+  },
+  {
+    courseId: 3,
+    name: "REACT",
+    code: "RCT56",
+    description: "React Javascript library",
+    faculty: ["Jack", "Gia"],
+    students: ["Raima", "Rita", "Sonu", "James"]
+  },
+  {
+    courseId: 4,
+    name: "BOOTSTRAP",
+    code: "BS297",
+    description: "Bootstrap Designing Framework",
+    faculty: [],
+    students: ["James", "Tia", "Ellie"]
+  },
+  {
+    courseId: 5,
+    name: "CSS",
+    code: "CS365",
+    description: "Basic stylesheet language",
+    faculty: [],
+    students: ["James", "Rita", "Monica"]
+  },
+  {
+    courseId: 6,
+    name: "REST AND MICROSERVICES",
+    code: "RM392",
+    description: "Introduction to Microservices",
+    faculty: [],
+    students: ["Sam"]
+  },
+  {
+    courseId: 7,
+    name: "NODE",
+    code: "ND725",
+    description: "Introduction to Node",
+    faculty: ["Sonia"],
+    students: ["Saransh", "Shrey", "Monica"]
+  }
+];
+let faculties = [
+  { id: 5, name: "Daniel", courses: ["ANGULAR"] },
+  { id: 4, name: "Sonia", courses: ["NODE"] },
+  { id: 3, name: "Jack", courses: ["REACT", "ANGULAR"] },
+  { id: 2, name: "Gia", courses: ["REACT"] },
+  { id: 1, name: "Aditya", courses: ["ANGULAR"] }
+];
+let classes = [
+  {
+    classId: 1,
+    course: "REACT",
+    time: "07:45",
+    endTime: "08:45",
+    topic: "Redux",
+    facultyName: "Jack"
+  },
+  {
+    classId: 2,
+    course: "ANGULAR",
+    time: "15:45",
+    endTime: "17:40",
+    topic: "Component",
+    facultyName: "Jack"
+  },
+  {
+    classId: 3,
+    course: "JAVASCRIPT",
+    time: "15:45",
+    endTime: "17:40",
+    topic: "Component",
+    facultyName: "Aditya"
+  }
+];
+let students = [
+  {
+    id: 16,
+    name: "Willie",
+    dob: "31-July-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["ANGULAR", "NODE"]
+  },
+  {
+    id: 15,
+    name: "Tia",
+    dob: "30-July-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: []
+  },
+  {
+    id: 14,
+    name: "Apoorv",
+    dob: "31-August-1998",
+    gender: "male",
+    about: "Want to learn new technologies",
+    courses: []
+  },
+  {
+    id: 13,
+    name: "Joy",
+    dob: "31-July-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["JAVASCRIPT"]
+  },
+  {
+    id: 12,
+    name: "Rachel",
+    dob: "31-August-1998",
+    gender: "female",
+    about: "Pursuing Graduation",
+    courses: []
+  },
+  {
+    id: 11,
+    name: "Monica",
+    dob: "30-July-1997",
+    gender: "female",
+    about: "Want to learn new technologies",
+    courses: ["CSS", "NODE"]
+  },
+  {
+    id: 10,
+    name: "Monu",
+    dob: "12-May-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["JAVASCRIPT"]
+  },
+  {
+    id: 9,
+    name: "Sonu",
+    dob: "12-May-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["REACT"]
+  },
+  {
+    id: 8,
+    name: "Raima",
+    dob: "30-July-1997",
+    gender: "female",
+    about: "Want to learn new technologies",
+    courses: ["REACT"]
+  },
+  {
+    id: 7,
+    name: "Rita",
+    dob: "31-August-1998",
+    gender: "female",
+    about: "Pursuing Graduation",
+    courses: ["JAVASCRIPT", "REACT", "CSS"]
+  },
+  {
+    id: 6,
+    name: "Shrey",
+    dob: "12-May-1997",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["NODE"]
+  },
+  {
+    id: 5,
+    name: "Saransh",
+    dob: "31-July-1997",
+    gender: "male",
+    about: "Want to learn new technologies",
+    courses: ["NODE"]
+  },
+  {
+    id: 4,
+    name: "Sanya",
+    dob: "31-July-1997",
+    gender: "male",
+    about: "Want to learn new technologies",
+    courses: []
+  },
+  {
+    id: 3,
+    name: "James",
+    dob: "12-July-1994",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["JAVASCRIPT", "BOOTSTRAP", "CSS", "REACT"]
+  },
+  {
+    id: 2,
+    name: "Sam",
+    dob: "12-July-1994",
+    gender: "male",
+    about: "Pursuing Graduation",
+    courses: ["ANGULAR", "REST AND MICROSERVICES"]
+  },
+  {
+    id: 1,
+    name: "Ellie",
+    dob: "12-June-1992",
+    gender: "female",
+    about: "Want to learn new technologies",
+    courses: ["BOOTSTRAP"]
+  }
+];
+
+app.post('/login', function (req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    var cust = customers.find(function (item) {
+        return item.email === email && item.password === password;
+    });
+    console.log(cust);
+    var custRec = {
+        name: cust.name,
+        email: cust.name.email,
+        role: cust.role
+    }
+    res.send(custRec);
 });
 
+//ADMIN 
+app.post('/register', function (req, res) {
+    let maxid = customers.reduce((acc, curr) => {
+        if (curr.custId > acc) {
+            return curr.custId;
+        } else {
+            return acc;
+        }
+    }, 0);
+    let cust = {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role,
+        custId:maxid+1
+    };
+    customers.unshift(cust);
+    var customerRes = {
+        name: req.body.name,
+        role: req.body.role,
+        email: req.body.email,
+    }
+    res.send(customerRes);
+    
+});
+app.get('/getStudentNames', function (req, res) {
+    let stdArr = students.map((a) => a.name);
+    res.send(stdArr);
+});
+app.get('/getFacultyNames', function (req, res) {
+    let stdArr = faculties.map((a) => a.name);
+    res.send(stdArr);
+});
+app.get('/getCourses', function (req, res) {
+    res.send(courses);
+});
+app.put('/putCourse', function (req, res) {
+    let course = req.body;
+    let findCourseInd = courses.findIndex((a) => a.courseId === +course.courseId);
+    if (findCourseInd >= 0) {
+        courses[findCourseInd] = course;
+        res.status(200).send(course);
+    } else {
+        res.status(404).send('Could not find course');
+    }
+});
+app.get('/getStudents', function (req, res) {
+    let page = req.query.page ? +req.query.page : 1;
+    let { course } = req.query;
+    let stds = students;
+    if (course) {
+        let courseArr = course.split(',');
+       stds = students.filter((student) =>
+        courseArr.some((course) => student.courses.includes(course))
+        );
+          console.log(courseArr,stds);
+    }
+  let result = pagination(stds,page);
+  res.json({
+    page: page,
+    items: result,
+    totalItems: result.length,
+    totalNum: stds.length
+  });
+})
+app.get('/getFaculties', function (req, res) {
+    let page = req.query.page ? +req.query.page : 1;
+    let { course } = req.query;
+    let stds = faculties;
+    if (course) {
+        let courseArr = course.split(',');
+       stds = faculties.filter((student) =>
+        courseArr.some((course) => student.courses.includes(course))
+        );
+          console.log(courseArr,stds);
+    }
+  let result = pagination(stds,page);
+  res.json({
+    page: page,
+    items: result,
+    totalItems: result.length,
+    totalNum: stds.length
+  });
+})
 
+// STUDENT
+
+app.post('/postStudentDetails', function (req, res) {
+    let std = req.body;
+    let maxid = students.reduce((acc, curr) => {
+        if (curr.id > acc) {
+            return curr.id;
+        } else {
+            return acc;
+        }
+    }, 0);
+    let newStd = { ...std, id: maxid + 1, courses: [] };
+    students.push(newStd);
+    res.json(newStd);
+
+});
+app.get('/getStudentDetails/:name', function (req, res) {
+    let { name } = req.params;
+    let std = students.find((a) => a.name === name);
+    if (std) {
+        res.json(std);
+    } else {
+        res.status(404).send('Student not found');
+    }
+});
+app.get('/getStudentCourse/:name', function (req, res) {
+    let { name } = req.params;
+    let courseArr = courses.filter(course => course.students.find((a)=>a===name));
+  //console.log(name, courseArr);
+    res.json(courseArr);
+});
+app.get('/getStudentClass/:name', function (req, res) {
+    let { name } = req.params;
+    let enrolledArr = courses.filter(course => course.students.includes(name));
+    let enrolled = enrolledArr.map((a) => {
+        return a.name;
+    });
+    const studentClasses = classes.filter(cls => enrolled.includes(cls.course));
+    res.json(studentClasses);
+});
+
+// FACULTY
+
+app.get('/getFacultyCourse/:name', function (req, res) {
+    let { name } = req.params;
+    let courseArr = courses.filter(course => course.faculty.includes(name));
+    let course = courseArr.map((a) => {
+        let obj = {
+            courseId: a.courseId,
+            name: a.name,
+            code: a.code,
+            description: a.description
+        };
+        return obj;
+    });
+    res.json(course);
+});
+app.get('/getFacultyClass/:name', function (req, res) {
+    let { name } = req.params;
+    const facultyClasses = classes.filter(cls => cls.facultyName===name);
+    res.json(facultyClasses);
+});
+app.post('/postClass', function (req, res) {
+    let cls = req.body;
+    let maxid = classes.reduce((acc, curr) => {
+        if (curr.classId > acc) {
+            return curr.classId;
+        } else {
+            return acc;
+        }
+    }, 0);
+    let newClass = { ...cls, classId: maxid + 1 };
+    classes.push(newClass);
+    res.json(newClass);
+});
+app.put('/postClass/:id', function (req, res) {
+    let { id } = req.params;
+    let cls = req.body;
+    let findClass = classes.findIndex((a) => a.classId === +id);
+    if (findClass>=0) {
+        let newClass = { ...cls, classId: +id }
+        classes[findClass] = newClass;
+        res.json(newClass);
+    } else {
+        res.status(404).send('Class not found');
+    }
+})
+
+function pagination(obj, page) {
+  var resArr = obj;
+  resArr = resArr.slice(page * 3 - 3, page * 3);
+  return resArr;
+}
 app.listen(port, () => console.log(`Node app listening on port ${port}!`));
