@@ -47,4 +47,3 @@ app.post('/myserver', async (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`Node app listening on port ${port}!`));
