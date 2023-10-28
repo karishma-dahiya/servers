@@ -1,3 +1,4 @@
+
 let express = require('express');
 let axios = require('axios');
 
@@ -28,53 +29,14 @@ app.post('/getServer', async (req, res) => {
   let { url, body, headers } = req.body;
   let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
   let header = {};
-  if (headers.hKey1 && headers.hValue1) {
-    header = { [hKey1]: hValue1 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+ if (hKey1 && hValue1) {
+    header[hKey1] = hValue1;
   }
   if (hKey2 && hValue2) {
-    header = { [hKey2]: hValue2 };
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey2] = hValue2;
   }
   if (hKey3 && hValue3) {
-    header = { [hKey2]: hValue2 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey3]: hValue3,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey3] = hValue3;
   }
   //console.log(header,headers);
   try {
@@ -91,53 +53,14 @@ app.post('/myserver', async (req, res) => {
   let { url, body, headers } = req.body;
   let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
   let header = {};
-  if (headers.hKey1 && headers.hValue1) {
-    header = { [hKey1]: hValue1 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+  if (hKey1 && hValue1) {
+    header[hKey1] = hValue1;
   }
   if (hKey2 && hValue2) {
-    header = { [hKey2]: hValue2 };
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey2] = hValue2;
   }
   if (hKey3 && hValue3) {
-    header = { [hKey2]: hValue2 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey3]: hValue3,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey3] = hValue3;
   }
   try {
       const response = await axios.post(url, JSON.parse(body),{headers:header});
@@ -151,53 +74,14 @@ app.post('/putserver', async (req, res) => {
   let { url, body, headers } = req.body;
   let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
   let header = {};
-  if (headers.hKey1 && headers.hValue1) {
-    header = { [hKey1]: hValue1 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+  if (hKey1 && hValue1) {
+    header[hKey1] = hValue1;
   }
   if (hKey2 && hValue2) {
-    header = { [hKey2]: hValue2 };
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey2] = hValue2;
   }
   if (hKey3 && hValue3) {
-    header = { [hKey2]: hValue2 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey3]: hValue3,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey3] = hValue3;
   }
   try {
       const response = await axios.put(url, JSON.parse(body),{headers:header});
@@ -211,53 +95,14 @@ app.post('/delete', async (req, res) => {
   let { url, body, headers } = req.body;
   let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
   let header = {};
-  if (headers.hKey1 && headers.hValue1) {
-    header = { [hKey1]: hValue1 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+  if (hKey1 && hValue1) {
+    header[hKey1] = hValue1;
   }
   if (hKey2 && hValue2) {
-    header = { [hKey2]: hValue2 };
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey3 && hValue3) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey2] = hValue2;
   }
   if (hKey3 && hValue3) {
-    header = { [hKey2]: hValue2 };
-    if (hKey2 && hValue2) {
-      header = {
-        [hKey3]: hValue3,
-        [hKey2]: hValue2,
-      };
-    }
-    if (hKey1 && hValue1) {
-      header = {
-        [hKey1]: hValue1,
-        [hKey2]: hValue2,
-        [hKey3]: hValue3,
-      };
-    }
+    header[hKey3] = hValue3;
   }
   try {
     
