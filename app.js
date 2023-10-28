@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
-        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-reqs',
         'GET, POST, OPTIONS, PUT, PATCH, DELETE, HEAD'
     );
     res.header(
@@ -24,24 +24,251 @@ const port = 2410;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));
 
 
+app.post('/getServer', async (req, res) => {
+  let { url, body, headers } = req.body;
+  let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
+  let header = {};
+  if (headers.hKey1 && headers.hValue1) {
+    header = { [hKey1]: hValue1 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey2 && hValue2) {
+    header = { [hKey2]: hValue2 };
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey3 && hValue3) {
+    header = { [hKey2]: hValue2 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey3]: hValue3,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  //console.log(header,headers);
+  try {
+    const response = await axios.get(url,{headers:header});
+    res.json(response.data);
+  } catch (error) {
+    //console.log(error);
+    //res.send(error)
+    res.status(401).json({error:error})
+  }
+})
 
 app.post('/myserver', async (req, res) => {
-  try {
-    const { method, fetchURL, data } = req.body;
-
-    if (method === 'GET') {
-      const response = await axios.get(fetchURL);
-      res.json(response.data);
-    } else if (method === 'POST') {
-      const response = await axios.post(fetchURL, data);
-      res.json(response.data);
-    } else {
-      res.status(400).json({ error: 'Invalid method' });
+  let { url, body, headers } = req.body;
+  let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
+  let header = {};
+  if (headers.hKey1 && headers.hValue1) {
+    header = { [hKey1]: hValue1 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
     }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey2 && hValue2) {
+    header = { [hKey2]: hValue2 };
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey3 && hValue3) {
+    header = { [hKey2]: hValue2 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey3]: hValue3,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  try {
+      const response = await axios.post(url, JSON.parse(body),{headers:header});
+      res.json(response.data);
+    
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(401).json({ error: error });
   }
 });
+app.post('/putserver', async (req, res) => {
+  let { url, body, headers } = req.body;
+  let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
+  let header = {};
+  if (headers.hKey1 && headers.hValue1) {
+    header = { [hKey1]: hValue1 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey2 && hValue2) {
+    header = { [hKey2]: hValue2 };
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey3 && hValue3) {
+    header = { [hKey2]: hValue2 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey3]: hValue3,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  try {
+      const response = await axios.put(url, JSON.parse(body),{headers:header});
+      res.json(response.data);
+    
+  } catch (error) {
+    res.status(401).json({ error: error });
+  }
+});
+app.post('/delete', async (req, res) => {
+  let { url, body, headers } = req.body;
+  let { hValue1, hValue2, hValue3, hKey1, hKey2, hKey3 } = headers;
+  let header = {};
+  if (headers.hKey1 && headers.hValue1) {
+    header = { [hKey1]: hValue1 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey2 && hValue2) {
+    header = { [hKey2]: hValue2 };
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey3 && hValue3) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  if (hKey3 && hValue3) {
+    header = { [hKey2]: hValue2 };
+    if (hKey2 && hValue2) {
+      header = {
+        [hKey3]: hValue3,
+        [hKey2]: hValue2,
+      };
+    }
+    if (hKey1 && hValue1) {
+      header = {
+        [hKey1]: hValue1,
+        [hKey2]: hValue2,
+        [hKey3]: hValue3,
+      };
+    }
+  }
+  try {
+    
+      const response = await axios.delete(url,{headers:header});
+      res.json(response.data);
+    
+  } catch (error) {
+    res.status(401).json({ error: error });
+  }
+});
+
 
  
 
