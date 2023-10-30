@@ -2,602 +2,266 @@ var express = require("express");
 var app = express();
 app.use(express.json());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, , authorization"
+    );
+    res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+    next();
 });
-const port = 2410;
-const pageSize = 5;
-let id = 745;
-let persons = [
+let port = 5005;
+let prods = [
   {
-    id: "1",
-    name: "Jack Smith",
-    age: 28,
-    city: "London",
-    company: "Apple",
+     id: 1,
+    category: "Watches",
+    description:
+      "The look that made Swiss watches the toast of the world. Still unbeatable.",
+    imgLink:
+      "https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+    name: "Silver",
+    price: 1600
   },
   {
-    id: "2",
-    name: "Bob Kelley",
-    age: 37,
-    city: "Paris",
-    company: "Microsoft",
+     id: 2,
+    category: "Watches",
+    description: "Dark, black beauty. Sure to look good on the wrist.",
+    imgLink:
+      "https://images.pexels.com/photos/1697566/pexels-photo-1697566.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Black",
+    price: 899
   },
   {
-    id: "3",
-    name: "Amit Gupta",
-    age: 29,
-    city: "New Delhi",
-    company: "Google",
+     id: 3,
+    category: "Watches",
+    description:
+      "Multi chronographs, stop watch, timers. Altimeter. What else.",
+    imgLink:
+      "https://images.pexels.com/photos/2113994/pexels id-photo-2113994.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Chronograph",
+    price: 1199
   },
   {
-    id: "6",
-    name: "Mary Stevens",
-    age: 30,
-    city: "London",
-    company: "Facebook",
+     id: 4,
+    category: "Watches",
+    description: "For all ages. For all times. Classic Look. Classic leather.",
+    imgLink:
+      "https://images.pexels.com/photos/236915/pexels-photo-236915.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Classic",
+    price: 1250
   },
   {
-    id: "8",
-    name: "Dave Burton",
-    age: 31,
-    city: "Paris",
-    company: "Tesla",
+     id: 5,
+    category: "Watches",
+    description: "The original Apple Watch. Still a great buy.",
+    imgLink:
+      "https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Apple v1",
+    price: 999
   },
   {
-    id: "11",
-    name: "Pradeep Kumar",
-    age: 43,
-    city: "Bangalore",
-    company: "Amazon",
+     id: 6,
+    category: "Watches",
+    description: "Mechanical 28 jewelled watch. Connoisseur delight.",
+    imgLink:
+      "https://images.pexels.com/photos/47339/mechanics-movement-feinmechanik-wrist-watch-47339.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Jewelled",
+    price: 1999
   },
   {
-    id: "16",
-    name: "Tim Jonas",
-    age: 47,
-    city: "London",
-    company: "Microsoft",
+     id: 7,
+    category: "Sunglasses",
+    description: "Desirable, reddish tint. Sure to attract attention.",
+    imgLink:
+      "https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Tinted Red",
+    price: 399
   },
   {
-    id: "18",
-    name: "Julia Martins",
-    age: 34,
-    city: "Paris",
-    company: "Apple",
+     id: 8,
+    category: "Sunglasses",
+    description: "Nostalgic, bluish tint, sure to get memories back. Vintage.",
+    imgLink:
+      "https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Oldies",
+    price: 199
   },
   {
-    id: "21",
-    name: "Payal Sethi Gupta",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
+     id: 9,
+    category: "Sunglasses",
+    description: "Trendy, young sunglasses with retro look. Teen favourite.",
+    imgLink:
+      "https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Youthful",
+    price: 219
   },
   {
-    id: "25",
-    name: "Anita Burton",
-    age: 34,
-    city: "London",
-    company: "Google",
+     id: 10,
+    category: "Sunglasses",
+    description: "Chic sunglasses. Classic dark shades, sure to generate envy.",
+    imgLink:
+      "https://images.pexels.com/photos/65659/glasses-glass-circle-light-transmittance-65659.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    name: "Classic Dark",
+    price: 249
   },
   {
-    id: "34",
-    name: "George Matthews",
-    age: 26,
-    city: "London",
-    company: "Tesla",
+     id: 11,
+    category: "Watches",
+    description: "Apple Watch Version 2. A delight.",
+    imgLink:
+      "https://images.pexels.com/photos/277406/pexels-photo-277406.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Apple v2",
+    price: 1499
   },
   {
-    id: "28",
-    name: "Vish Talwar",
-    age: 46,
-    city: "New Delhi",
-    company: "Amazon",
+     id: 12,
+    category: "Belts",
+    description: "Stylish formal brown belt. An office favourite.",
+    imgLink:
+      "https://as1.ftcdn.net/jpg/02/14/48/72/500_F_214487233_Aahw3DohDu6dSSfMqWCcU1QDatxpDt6E.jpg",
+    name: "Fab Brown",
+    price: 149
   },
   {
-    id: "41",
-    name: "Pooja Kaur",
-    age: 25,
-    city: "Bangalore",
-    company: "Amazon",
+     id: 13,
+    category: "Handbags",
+    description: "Desirable travel bag. Mix of convenience and style",
+    imgLink:
+      "https://images.pexels.com/photos/2534961/pexels-photo-2534961.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Travel Lite",
+    price: 199
   },
   {
-    id: "51",
-    name: "John Bundy",
-    age: 27,
-    city: "London",
-    company: "Amazon",
+     id: 14,
+    category: "Handbags",
+    description: "3 Pockets, 2 Zips -  ideal for shopping and parties",
+    imgLink:
+      "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Chic Leather",
+    price: 749
   },
   {
-    id: "52",
-    name: "Anna Matthews",
-    age: 39,
-    city: "Paris",
-    company: "Google",
+     id: 15,
+    category: "Belts",
+    description: "Signature belt from Gucci ",
+    imgLink:
+      "https://img.shopstyle-cdn.com/pim/c7/a6/c7a695a8db5a375b222f15bea045bdea_xlarge.jpg",
+    name: "Raw Edge",
+    price: 799
   },
   {
-    id: "53",
-    name: "Pankaj Gupta",
-    age: 32,
-    city: "New Delhi",
-    company: "Facebook",
+     id: 16,
+    category: "Belts",
+    description: "Iconic metallic belt",
+    imgLink:
+      "https://img.shopstyle-cdn.com/pim/81/78/8178fa6c3b27d3f3e0fe18d019c992ea_xlarge.jpg",
+    name: "Goofy Black",
+    price: 349
   },
   {
-    id: "56",
-    name: "Kathy Graham",
-    age: 34,
-    city: "London",
-    company: "Tesla",
+     id: 17,
+    category: "Sunglasses",
+    description: "Min black faded front shades",
+    imgLink:
+      "https://cdn.shopify.com/s/files/1/0898/5824/products/QUAY_HIGHKEY_Mini_BLACK_FADE_FRONT_450x.jpg",
+    name: "Quay Shades",
+    price: 479
   },
   {
-    id: "58",
-    name: "Tony Fullerton",
-    age: 36,
-    city: "Paris",
-    company: "Amazon",
+     id: 18,
+    category: "Belts",
+    description: "Evergreen formal belt with classic buckle",
+    imgLink:
+      "https://as1.ftcdn.net/jpg/02/02/45/86/500_F_202458696_CYlcJbJfjgUb2VgQnPSUxHU79v6I3SC6.jpg",
+    name: "Classic Brown",
+    price: 128
   },
   {
-    id: "61",
-    name: "Smita Kumar",
-    age: 38,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "76",
-    name: "Harry Smith",
-    age: 41,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "78",
-    name: "Amy Martins",
-    age: 27,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "81",
-    name: "Richa Singh",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "95",
-    name: "Boris Thompson",
-    age: 43,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "94",
-    name: "John Major",
-    age: 36,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "88",
-    name: "Ashish Talwar",
-    age: 57,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "121",
-    name: "T Ashwin",
-    age: 40,
-    city: "Bangalore",
-    company: "Google",
-  },
-  {
-    id: "145",
-    name: "Steve Paine",
-    age: 31,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "167",
-    name: "David Cummins",
-    age: 42,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "172",
-    name: "Rishabh Gupta",
-    age: 34,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "176",
-    name: "Serena Stevens",
-    age: 25,
-    city: "London",
-    company: "Facebook",
-  },
-  {
-    id: "184",
-    name: "Lionel Burton",
-    age: 27,
-    city: "Paris",
-    company: "Tesla",
-  },
-  {
-    id: "211",
-    name: "Navdeep Kumar",
-    age: 40,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "216",
-    name: "Joe Harris",
-    age: 45,
-    city: "London",
-    company: "Microsoft",
-  },
-  {
-    id: "218",
-    name: "Angela Smith",
-    age: 33,
-    city: "Paris",
-    company: "Apple",
-  },
-  {
-    id: "321",
-    name: "Neha Sehgal",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "225",
-    name: "Margaret B",
-    age: 35,
-    city: "London",
-    company: "Google",
-  },
-  {
-    id: "234",
-    name: "Harry Seldon",
-    age: 28,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "428",
-    name: "Maya Iyer",
-    age: 49,
-    city: "New Delhi",
-    company: "Amazon",
-  },
-  {
-    id: "441",
-    name: "Anita Sood",
-    age: 29,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "151",
-    name: "Donald Jr.",
-    age: 32,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "252",
-    name: "Timothy Matthews",
-    age: 45,
-    city: "Paris",
-    company: "Google",
-  },
-  {
-    id: "435",
-    name: "Umesh Gupta",
-    age: 26,
-    city: "New Delhi",
-    company: "Facebook",
-  },
-  {
-    id: "286",
-    name: "Stephanie Graham",
-    age: 29,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "158",
-    name: "Charles Bush",
-    age: 32,
-    city: "Paris",
-    company: "Amazon",
-  },
-  {
-    id: "261",
-    name: "Sonia Aiyer",
-    age: 35,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "576",
-    name: "Edwards Smith",
-    age: 39,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "378",
-    name: "Ken Rosewel",
-    age: 26,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "281",
-    name: "Rohit Jain",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "295",
-    name: "Michael Fox",
-    age: 44,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "194",
-    name: "Viktor Major",
-    age: 38,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "688",
-    name: "Joy Sharma",
-    age: 54,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "721",
-    name: "Pranay Bansal",
-    age: 37,
-    city: "Bangalore",
-    company: "Google",
-  },
-];
-let products = [
-  {
-    id: "A101",
-    name: "Pepsi 300ml",
-    price: 20,
-  },
-  {
-    id: "A232",
-    name: "Diet Coke 300ml",
-    price: 25,
-  },
-  {
-    id: "A102",
-    name: "Pepsi 500ml",
-    price: 40,
-  },
-  {
-    id: "A237",
-    name: "Coke 1l",
-    price: 75,
-  },
-  {
-    id: "B034",
-    name: "Fruit and Nuts - 40g",
-    price: 15,
-  },
-  {
-    id: "B035",
-    name: "Crackles - 100g",
-    price: 45,
-  },
-  {
-    id: "B036",
-    name: "Nutties - 20g",
-    price: 10,
-  },
-  {
-    id: "B173",
-    name: "25gm bar",
-    price: 35,
-  },
-];
-let users = [
-  { username: "Emp101", password: "Emp101", name: "Jack Smith", role: "user" },
-  { username: "Emp107", password: "Emp107", name: "Mary Gomes", role: "user" },
-  { username: "Emp211", password: "Emp211", name: "Anna Steve", role: "admin" },
-  { username: "Emp218", password: "Emp218", name: "Bob Jenner", role: "admin" },
-];
-
-app.get("/productApp/products", function (req, res) {
-  res.send(products);
-});
-app.get("/productApp/users", function (req, res) {
-  let users1 = users.map((u) => ({
-    username: u.username,
-    name: u.name,
-    role: u.role,
-  }));
-  res.send(users1);
-});
-app.post("/productApp/products", (req, res) => {
-  const product = req.body;
-  let prod = products.find((pr) => pr.id === product.id);
-  if (!prod) {
-    products.push(product);
-    console.log(product);
-    res.send(product);
-  } else res.status(400).send("Product Id already exists");
-});
-app.post("/productApp/users", (req, res) => {
-  const user = req.body;
-  let u1 = users.find((u) => u.username === user.username);
-  if (!u1) {
-    users.push(user);
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.status(400).send("Username already exists");
-});
-app.post("/productApp/login", (req, res) => {
-  const details = req.body;
-  let user = users.find(
-    (u1) => u1.username === details.username && u1.password === details.password
-  );
-  if (user) {
-    let u1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(u1);
-  } else res.status(400).send("Invalid username or password");
-});
-app.get("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = products.find((obj1) => obj1.id === id);
-  obj ? res.send(obj) : res.send("not found");
-});
-app.put("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  const product = req.body;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    products[index] = product;
-    res.send(product);
-  } else res.send("not found");
-});
-app.delete("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let product = products.splice(index, 1);
-    res.send(product);
-  } else res.send("not found");
-});
-app.put("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  const user = req.body;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    users[index] = user;
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.send("not found");
-});
-app.delete("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    let user = users.splice(index, 1);
-    res.send("User deleted");
-  } else res.send("not found");
-});
-
-app.get("/personApp/persons", function (req, res) {
-  let page = req.query.page ? +req.query.page : 1;
-  let city = req.query.city;
-  let company = req.query.company;
-  let data1 = persons;
-  data1 = filterParam(data1, "city", city);
-  data1 = filterParam(data1, "company", company);
-  res.send(makeData(page, pageSize, data1));
-});
-
-app.post("/personApp/persons", (req, res) => {
-  const person = req.body;
-  person.id = id + 1;
-  id = id + 1;
-  persons.push(person);
-  res.send(person);
-});
-
-let makeData = (pageNum, size, data1) => {
-  let startIndex = (pageNum - 1) * size;
-  let endIndex =
-    data1.length > startIndex + size - 1
-      ? startIndex + size - 1
-      : data1.length - 1;
-  let data2 = data1.filter(
-    (lt, index) => index >= startIndex && index <= endIndex
-  );
-  let dataFull = {
-    startIndex: data1.length > 0 ? startIndex + 1 : startIndex,
-    endIndex: data1.length > 0 ? endIndex + 1 : endIndex,
-    numOfItems: data1.length,
-    data: data2,
-  };
-  return dataFull;
-};
-
-let filterParam = (arr, name, values) => {
-  if (!values) return arr;
-  let valuesArr = values.split(",");
-  let arr1 = arr.filter((a1) => valuesArr.find((val) => val === a1[name]));
-  return arr1;
-};
-
-app.get("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = persons.find((obj1) => obj1.id === id);
-  if (obj) res.send(obj);
-  res.send("not found");
-});
-
-app.get("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let user = users.find((obj1) => obj1.username === username);
-  user ? res.send(user) : res.send("not found");
-});
-
-app.put("/personApp/persons/:id", function (req, res) {
-  console.log("Put called");
-  let id = req.params.id;
-  const person = req.body;
-  console.log(id, person);
-  let updatedPerson = { id: id, ...person };
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    persons[index] = updatedPerson;
-    res.send(updatedPerson);
-  } else res.send("not found");
-});
-
-app.delete("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let person = persons.splice(index, 1);
-    res.send(person);
+     id: 19,
+    category: "Handbags",
+    description: "Beach handbag to go along with a beach holiday",
+    imgLink:
+      "https://images.pexels.com/photos/2305000/pexels-photo-2305000.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "Funky Jute",
+    price: 99
   }
-  res.send("not found");
-});
-
+];
+let orders = [];
+let users= [
+    {email:'admin@gmail.com',password:'admin'}
+]
 
 app.listen(port, () => console.log(`Node app listening on port ${port}!`));
+
+app.get('/products', (req, res) => {
+    
+        res.send(prods);
+    
+});
+app.get('/products/category/:cat', (req, res) => {
+    let { cat } = req.params;
+    if (cat) {
+        let prod = prods.filter((a) => a.category === cat);
+        res.send(prod);
+    } 
+});
+app.get('/products/:id', (req, res) => {
+    let { id } = req.params;
+    let prod = prods.find((a) => a.id === +id);
+    if (prod) {
+        res.send(prod);
+    } else {
+        res.send("Product not available")
+    }
+});
+app.post('/products', (req, res) => {
+    let prod = req.body;
+    let maxIdProd = prods.reduce((acc, curr) => {
+        if (curr.id > acc) {
+            return curr.id
+        } else {
+            return acc
+        }
+    }, 0);
+    let newProd = { ...prod, id: maxIdProd+ 1 };
+    prods.push(newProd);
+    res.status(200).send('Product Added');
+});
+app.put('/products/:id', (req, res) => {
+    let prod = req.body;
+    let { id } = req.params;
+    let findProdInd = prods.findIndex((a) => a.id === +id);
+    if (findProdInd >= 0) {
+        prods[findProdInd] = prod;
+         res.status(200).send('Product Updated');
+    } else {
+        res.status(401).send('Could not find Product');
+    }
+});
+app.delete('/products/:id', (req, res) => {
+    let { id } = req.params;
+    let findProdInd = prods.findIndex((a) => a.id === +id);
+    if (findProdInd >= 0) {
+        prods.splice(findProdInd, 1);
+         res.status(200).send('Product Deleted');
+    } else {
+        res.status(401).send('Could not find Product');
+    }
+});
+app.get('/orders', (req, res) => {
+    res.send(orders);
+});
+app.post('/orders', (req, res) => {
+    let order = req.body;
+    orders.push(order);
+    res.send('Order added');
+});
+app.post('/login', (req, res) => {
+    let { email, password } = req.body;
+    let user = users.find((a) => a.email === email && a.password === password);
+    if (user) {
+        res.send(user);
+    } else {
+        res.status(401).json({ message: 'Incorrect username or password' })
+    }
+});
