@@ -1,0 +1,168 @@
+let products = [
+    {
+        prodCode: "DS2S245",
+        category: "Dining",
+        desc: [
+            "Two	seater	Dining	Set",
+            "Built	from	High	quality	wood",
+            "1	year	warranty"
+        ],
+        img:
+            "https://media.istockphoto.com/id/968086564/photo/wooden-chairs-at-table-in-bright-open-space-interior-with-lamp-next-to-grey-couch-real-photo.jpg?s=612x612&w=0&k=20&c=TfE8sZbX_XC4yIYEaRAJHrdIWjZqvRx3Crn0ygcr-h0=",
+        ingredients: [
+            { ingName: "Dining	Table", qty: 1 },
+            { ingName: "Chair", qty: 2 }
+        ],
+        title: "Two	seater	Dining	Set"
+    },
+    {
+        prodCode: "DS6S761",
+        category: "Dining",
+        desc: [
+            "Six	Seater	Dining	Set	in	Antique	Cherry	Colour",
+            "Assembly	by	Skilled	Carpenters",
+            "Made	from	Teak	wood"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN822m2f5If_TFxNr3zyIa8tYXB-yKD1dh5Q&usqp=CAU",
+        ingredients: [
+            { ingName: "Dining	Table", qty: 1 },
+            { ingName: "Chair", qty: 4 },
+            { ingName: "Bench", qty: 1 }
+        ],
+        title: "Six	Seater	Dining	Set"
+    },
+    {
+        prodCode: "DS4S177",
+        category: "Dining",
+        desc: [
+            "Mild	Steel	Four	Seater	Dining	Set	in	Black	Colour",
+            "Knock-down	construction	for	easy	transportation"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSySoE4QjULs608ujPszlaGDBxIv3HtXOvt_A&usqp=CAU",
+        ingredients: [
+            { ingName: "Dining	Table", qty: 1 },
+            { ingName: "Chair", qty: 4 }
+        ],
+        title: "Mild	Steel	Dining	Set"
+    },
+    {
+        prodCode: "DC2S705",
+        category: "Dining",
+        desc: [
+            "Solid	Wood	Dining	Chair	Set	of	Two	in	Dark	Walnut	Colour",
+            "Beautiful	design	carved	on	dining	chair",
+            "Dining	chair	seat	upholstered	in	dark	brown	Fabric"],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZZUSGH84TMCeNbv968u_9M0VvdsHMOTp7-A&usqp=CAU",
+        ingredients: [{ ingName: "Chair", qty: 2 }],
+        title: "Dining	Chair	Set"
+    },
+    {
+        prodCode: "BN1S388",
+        category: "Dining",
+        desc: [
+            "Solid	Wood	Dining	Bench	in	Dark	Walnut	Colour",
+            "Comfortable	bench	for	a	relaxed	dinner"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC6nlvxyzBUwdQSTKhb3RUIVdwPeFiTaq1cg&usqp=CAU",
+        ingredients: [{ ingName: "Bench", qty: 1 }],
+        title: "Dining	Bench"
+    },
+    {
+        prodCode: "SF2S532",
+        category: "Drawing",
+        desc: [
+            "Characteristic	Rising	Track	Arm	Rest	Design",
+            "Premium	High	Gloss	Leatherette	Upholstery",
+            "Independent	Headrest	And	Lumber	Support"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBTP8KwXvVmHIJ30y_PQSYcMfee-XmBRJyhw&usqp=CAU",
+        ingredients: [{ ingName: "Sofa", qty: 1 }],
+        title: "Two	Seater	Sofa"
+    },
+    {
+        prodCode: "SF2S206",
+        category: "Drawing",
+        desc: ["Two	Seater	Sofa	in	Blue	Colour", "Assembly	by	Skilled	Carpenters"],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUyRbQdK3Y5ik3EYxoNKxXKB9rk0mQtu-X2A&usqp=CAU",
+        ingredients: [{ ingName: "Sofa", qty: 1 }],
+        title: "Two	Seater	Sofa"
+    },
+    {
+        prodCode: "SFBD311",
+        category: "Drawing",
+        desc: [
+            "Sofa	Cum	bed	in	Brown	Colour",
+            "Ply-wood	construction	with	hand	polished	finish",
+            "Removable	fabric	cover	on	best	quality	foam	mattress",
+            "Throw	cushions	and	bolsters	come	with	the	product"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHTlxhpw7TcqrqL9Wwxt4dov2yY4GNXDW2wA&usqp=CAU",
+        ingredients: [{ ingName: "Sofa", qty: 1 }, { ingName: "Cushions", qty: 2 }],
+        title: "Sofa	cum	Bed"
+    },
+    {
+        prodCode: "BDQS381",
+        category: "Bedroom",
+        desc: [
+            "Wood	Box	Storage	King	Size	Bed	in	Wenge	Colour	",
+            "Box	Storage	included	for	Maximum	space	utilization",
+            "Mattress	is	included"
+        ],
+        img:
+            "data:image/jpeg;base64,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",
+        ingredients: [{ ingName: "Bed", qty: 1 }, { ingName: "Mattress", qty: 2 }],
+        title: "King	size	Bed"
+    },
+    {
+        prodCode: "BDQS229",
+        category: "Bedroom",
+        desc: [
+            "Wood	Hydraulic	Storage	Queen	Size	Bed",
+            "Half	hydraulic	storage",
+            "Superior	E2	grade	MDF	used	with	melamine	finish"
+        ],
+        img:
+            "data:image/jpeg;base64,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",
+        ingredients: [{ ingName: "Bed", qty: 1 }],
+        title: "Queen	size	Bed"
+    },
+    {
+        prodCode: "ST1T425",
+        category: "Study",
+        desc: [
+            "Wood	Study	Table	in	Walnut	Colour",
+            "Assembly	by	Skilled	Carpenters",
+            "Built	from	High	Quality	Wood"
+        ],
+        img:
+            "data:image/jpeg;base64,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",
+        ingredients: [{ ingName: "Study	Table", qty: 1 }],
+        title: "Study	Table"
+    },
+    {
+        prodCode: "ST1T588",
+        category: "Study",
+        desc: [
+            "	Wood	Study	Table	in	Highgloss	White	&	Blue	Colour",
+            "Study	table	comes	with	bookshelf	on	top,	5	drawers	&	1	open	shelf",
+            "Superior	quality	MDF	with	stain	resistant	melamine	finish"
+        ],
+        img:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQClI8EZH4-qQLXUvTmxoYG_TyQuA7AwJNqmzOyD-6BKuCyFptysArxaNVw6GC1qHGfZ94&usqp=CAU",
+        ingredients: [{ ingName: "Study	Table", qty: 1 }],
+        title: "Study	Table"
+    }
+];
+let users = [
+    {email:'user@user.com',password:'user123',role:'user'},
+    {email:'admin@admin.com',password:'admin123',role:'admin'},
+]
+
+module.exports = { products,users };
