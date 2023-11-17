@@ -1,603 +1,449 @@
-var express = require("express");
-var app = express();
+let express = require('express');
+let jwt = require('jsonwebtoken');
+
+
+const multer = require('multer');
+const csv = require('fast-csv');
+const fs = require('fs');
+
+let passport = require('passport');
+let JwtStrategy = require('passport-jwt').Strategy;
+let ExtractJWT = require('passport-jwt').ExtractJwt;
+
+
+let { mobiles,pincodes,reviews,users,orders,wishlist } = require('./data');
+
+let app = express();
+
 app.use(express.json());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, POST, DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-const port = 2410;
-const pageSize = 5;
-let id = 745;
-let persons = [
-  {
-    id: "1",
-    name: "Jack Smith",
-    age: 28,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "2",
-    name: "Bob Kelley",
-    age: 37,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "3",
-    name: "Amit Gupta",
-    age: 29,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "6",
-    name: "Mary Stevens",
-    age: 30,
-    city: "London",
-    company: "Facebook",
-  },
-  {
-    id: "8",
-    name: "Dave Burton",
-    age: 31,
-    city: "Paris",
-    company: "Tesla",
-  },
-  {
-    id: "11",
-    name: "Pradeep Kumar",
-    age: 43,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "16",
-    name: "Tim Jonas",
-    age: 47,
-    city: "London",
-    company: "Microsoft",
-  },
-  {
-    id: "18",
-    name: "Julia Martins",
-    age: 34,
-    city: "Paris",
-    company: "Apple",
-  },
-  {
-    id: "21",
-    name: "Payal Sethi Gupta",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "25",
-    name: "Anita Burton",
-    age: 34,
-    city: "London",
-    company: "Google",
-  },
-  {
-    id: "34",
-    name: "George Matthews",
-    age: 26,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "28",
-    name: "Vish Talwar",
-    age: 46,
-    city: "New Delhi",
-    company: "Amazon",
-  },
-  {
-    id: "41",
-    name: "Pooja Kaur",
-    age: 25,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "51",
-    name: "John Bundy",
-    age: 27,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "52",
-    name: "Anna Matthews",
-    age: 39,
-    city: "Paris",
-    company: "Google",
-  },
-  {
-    id: "53",
-    name: "Pankaj Gupta",
-    age: 32,
-    city: "New Delhi",
-    company: "Facebook",
-  },
-  {
-    id: "56",
-    name: "Kathy Graham",
-    age: 34,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "58",
-    name: "Tony Fullerton",
-    age: 36,
-    city: "Paris",
-    company: "Amazon",
-  },
-  {
-    id: "61",
-    name: "Smita Kumar",
-    age: 38,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "76",
-    name: "Harry Smith",
-    age: 41,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "78",
-    name: "Amy Martins",
-    age: 27,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "81",
-    name: "Richa Singh",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "95",
-    name: "Boris Thompson",
-    age: 43,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "94",
-    name: "John Major",
-    age: 36,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "88",
-    name: "Ashish Talwar",
-    age: 57,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "121",
-    name: "T Ashwin",
-    age: 40,
-    city: "Bangalore",
-    company: "Google",
-  },
-  {
-    id: "145",
-    name: "Steve Paine",
-    age: 31,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "167",
-    name: "David Cummins",
-    age: 42,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "172",
-    name: "Rishabh Gupta",
-    age: 34,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "176",
-    name: "Serena Stevens",
-    age: 25,
-    city: "London",
-    company: "Facebook",
-  },
-  {
-    id: "184",
-    name: "Lionel Burton",
-    age: 27,
-    city: "Paris",
-    company: "Tesla",
-  },
-  {
-    id: "211",
-    name: "Navdeep Kumar",
-    age: 40,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "216",
-    name: "Joe Harris",
-    age: 45,
-    city: "London",
-    company: "Microsoft",
-  },
-  {
-    id: "218",
-    name: "Angela Smith",
-    age: 33,
-    city: "Paris",
-    company: "Apple",
-  },
-  {
-    id: "321",
-    name: "Neha Sehgal",
-    age: 41,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "225",
-    name: "Margaret B",
-    age: 35,
-    city: "London",
-    company: "Google",
-  },
-  {
-    id: "234",
-    name: "Harry Seldon",
-    age: 28,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "428",
-    name: "Maya Iyer",
-    age: 49,
-    city: "New Delhi",
-    company: "Amazon",
-  },
-  {
-    id: "441",
-    name: "Anita Sood",
-    age: 29,
-    city: "Bangalore",
-    company: "Amazon",
-  },
-  {
-    id: "151",
-    name: "Donald Jr.",
-    age: 32,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "252",
-    name: "Timothy Matthews",
-    age: 45,
-    city: "Paris",
-    company: "Google",
-  },
-  {
-    id: "435",
-    name: "Umesh Gupta",
-    age: 26,
-    city: "New Delhi",
-    company: "Facebook",
-  },
-  {
-    id: "286",
-    name: "Stephanie Graham",
-    age: 29,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "158",
-    name: "Charles Bush",
-    age: 32,
-    city: "Paris",
-    company: "Amazon",
-  },
-  {
-    id: "261",
-    name: "Sonia Aiyer",
-    age: 35,
-    city: "Bangalore",
-    company: "Microsoft",
-  },
-  {
-    id: "576",
-    name: "Edwards Smith",
-    age: 39,
-    city: "London",
-    company: "Apple",
-  },
-  {
-    id: "378",
-    name: "Ken Rosewel",
-    age: 26,
-    city: "Paris",
-    company: "Microsoft",
-  },
-  {
-    id: "281",
-    name: "Rohit Jain",
-    age: 33,
-    city: "New Delhi",
-    company: "Google",
-  },
-  {
-    id: "295",
-    name: "Michael Fox",
-    age: 44,
-    city: "London",
-    company: "Tesla",
-  },
-  {
-    id: "194",
-    name: "Viktor Major",
-    age: 38,
-    city: "London",
-    company: "Amazon",
-  },
-  {
-    id: "688",
-    name: "Joy Sharma",
-    age: 54,
-    city: "New Delhi",
-    company: "Microsoft",
-  },
-  {
-    id: "721",
-    name: "Pranay Bansal",
-    age: 37,
-    city: "Bangalore",
-    company: "Google",
-  },
-];
-let products = [
-  {
-    id: "A101",
-    name: "Pepsi 300ml",
-    price: 20,
-  },
-  {
-    id: "A232",
-    name: "Diet Coke 300ml",
-    price: 25,
-  },
-  {
-    id: "A102",
-    name: "Pepsi 500ml",
-    price: 40,
-  },
-  {
-    id: "A237",
-    name: "Coke 1l",
-    price: 75,
-  },
-  {
-    id: "B034",
-    name: "Fruit and Nuts - 40g",
-    price: 15,
-  },
-  {
-    id: "B035",
-    name: "Crackles - 100g",
-    price: 45,
-  },
-  {
-    id: "B036",
-    name: "Nutties - 20g",
-    price: 10,
-  },
-  {
-    id: "B173",
-    name: "25gm bar",
-    price: 35,
-  },
-];
-let users = [
-  { username: "Emp101", password: "Emp101", name: "Jack Smith", role: "user" },
-  { username: "Emp107", password: "Emp107", name: "Mary Gomes", role: "user" },
-  { username: "Emp211", password: "Emp211", name: "Anna Steve", role: "admin" },
-  { username: "Emp218", password: "Emp218", name: "Bob Jenner", role: "admin" },
-];
-
-app.get("/productApp/products", function (req, res) {
-  res.send(products);
-});
-app.get("/productApp/users", function (req, res) {
-  let users1 = users.map((u) => ({
-    username: u.username,
-    name: u.name,
-    role: u.role,
-  }));
-  res.send(users1);
-});
-app.post("/productApp/products", (req, res) => {
-  const product = req.body;
-  let prod = products.find((pr) => pr.id === product.id);
-  if (!prod) {
-    products.push(product);
-    console.log(product);
-    res.send(product);
-  } else res.status(400).send("Product Id already exists");
-});
-app.post("/productApp/users", (req, res) => {
-  const user = req.body;
-  let u1 = users.find((u) => u.username === user.username);
-  if (!u1) {
-    users.push(user);
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.status(400).send("Username already exists");
-});
-app.post("/productApp/login", (req, res) => {
-  const details = req.body;
-  let user = users.find(
-    (u1) => u1.username === details.username && u1.password === details.password
-  );
-  if (user) {
-    let u1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(u1);
-  } else res.status(400).send("Invalid username or password");
-});
-app.get("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = products.find((obj1) => obj1.id === id);
-  obj ? res.send(obj) : res.send("not found");
-});
-app.put("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  const product = req.body;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    products[index] = product;
-    res.send(product);
-  } else res.send("not found");
-});
-app.delete("/productApp/products/:id", function (req, res) {
-  let id = req.params.id;
-  let index = products.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let product = products.splice(index, 1);
-    res.send(product);
-  } else res.send("not found");
-});
-app.put("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  const user = req.body;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    users[index] = user;
-    let user1 = {
-      username: user.username,
-      name: user.name,
-      role: user.role,
-    };
-    res.send(user1);
-  } else res.send("not found");
-});
-app.delete("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let index = users.findIndex((obj1) => obj1.username === username);
-  if (index >= 0) {
-    let user = users.splice(index, 1);
-    res.send("User deleted");
-  } else res.send("not found");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept,  authorization"
+    );
+    res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
+    next();
 });
 
-app.get("/personApp/persons", function (req, res) {
-  let page = req.query.page ? +req.query.page : 1;
-  let city = req.query.city;
-  let company = req.query.company;
-  let data1 = persons;
-  data1 = filterParam(data1, "city", city);
-  data1 = filterParam(data1, "company", company);
-  res.send(makeData(page, pageSize, data1));
-});
 
-app.post("/personApp/persons", (req, res) => {
-  const person = req.body;
-  person.id = id + 1;
-  id = id + 1;
-  persons.push(person);
-  res.send(person);
-});
+const port = 5005;
 
-let makeData = (pageNum, size, data1) => {
-  let startIndex = (pageNum - 1) * size;
-  let endIndex =
-    data1.length > startIndex + size - 1
-      ? startIndex + size - 1
-      : data1.length - 1;
-  let data2 = data1.filter(
-    (lt, index) => index >= startIndex && index <= endIndex
-  );
-  let dataFull = {
-    startIndex: data1.length > 0 ? startIndex + 1 : startIndex,
-    endIndex: data1.length > 0 ? endIndex + 1 : endIndex,
-    numOfItems: data1.length,
-    data: data2,
-  };
-  return dataFull;
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+let logs = [];
+
+
+
+
+app.use(passport.initialize());
+
+
+
+
+
+app.listen(port, () => console.log(`Server is listening on port ${port}`));
+
+const params = {
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'jwtsecret5634278'
 };
 
-let filterParam = (arr, name, values) => {
-  if (!values) return arr;
-  let valuesArr = values.split(",");
-  let arr1 = arr.filter((a1) => valuesArr.find((val) => val === a1[name]));
-  return arr1;
-};
+const jwtExpirySeconds = 30000;
 
-app.get("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let obj = persons.find((obj1) => obj1.id === id);
-  if (obj) res.send(obj);
-  res.send("not found");
+let strategyAll = new JwtStrategy(params,function (token, done) {
+  //console.log(token,users);  
+  let user = users.find((a) => a.id === token.id);
+    //console.log("User:", user);
+    if (!user) {
+        return done(null, false, { message: 'Incorrect username or password' });
+    } else {
+          
+        return done(null, user);
+    }
+});
+let strategyAdmin = new JwtStrategy(params,function (token, done) {
+    //console.log('In JWTstratery', token);
+    let user = users.find((a) => a.id===token.id);
+    //console.log("User:", user);
+    if (!user) {
+        return done(null, false, { message: 'Incorrect username or password' });
+    } else if (user.role !== 'admin') {
+        return done(null, false, { message: 'You do not have admin role' });   
+    }
+    else {
+        return done(null, user);
+    }
 });
 
-app.get("/productApp/users/:username", function (req, res) {
-  let username = req.params.username;
-  let user = users.find((obj1) => obj1.username === username);
-  user ? res.send(user) : res.send("not found");
+passport.use('roleAll',strategyAll);
+passport.use('roleAdmin', strategyAdmin);
+
+
+app.get('/report',passport.authenticate('roleAdmin',{ session: false }), (req, res) => {
+     const userId = req.user.id;
+    const countOccurrences = (arr) =>
+        arr.reduce((acc, value) => {
+            acc[value] = (acc[value] || 0) + 1;
+            return acc;
+        }, {});
+
+    // Get products added to orders by the user
+    const addedProducts = orders
+        .filter((order) => order.userId === userId)
+        .flatMap((order) => order.products);
+
+    // Get most added products and their counts
+    const mostAddedProducts = Object.entries(countOccurrences(addedProducts))
+        .sort(([, countA], [, countB]) => countB - countA)
+        .map(([productId, count]) => ({
+            product: mobiles.find((product) => product.id === parseInt(productId)),
+            count,
+        }));
+
+    // Get most searched products and their counts (based on added products)
+    const mostSearchedProducts = mostAddedProducts;
+
+    // Get most favorite products and their counts
+    const favoriteProducts = wishlist
+        .filter((item) => item.userId === userId)
+        .map((item) => item.productId);
+
+    const mostFavoriteProducts = Object.entries(countOccurrences(favoriteProducts))
+        .sort(([, countA], [, countB]) => countB - countA)
+        .map(([productId, count]) => ({
+            product: mobiles.find((product) => product.id === parseInt(productId)),
+            count,
+        }));
+
+    // Return the report
+    res.json({
+        mostAddedProducts,
+        mostSearchedProducts,
+        mostFavoriteProducts,
+    });
 });
 
-app.put("/personApp/persons/:id", function (req, res) {
-  console.log("Put called");
-  let id = req.params.id;
-  const person = req.body;
-  console.log(id, person);
-  let updatedPerson = { id: id, ...person };
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    persons[index] = updatedPerson;
-    res.send(updatedPerson);
-  } else res.send("not found");
-});
-
-app.delete("/personApp/persons/:id", function (req, res) {
-  let id = req.params.id;
-  let index = persons.findIndex((obj1) => obj1.id === id);
-  if (index >= 0) {
-    let person = persons.splice(index, 1);
-    res.send(person);
+app.post('/upload', upload.single('csvFile'),passport.authenticate('roleAdmin',{ session: false }), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
   }
-  res.send("not found");
+
+  const csvData = req.file.buffer.toString();
+  parseCSVData(csvData)
+    .then((parsedProducts) => {
+      mobiles = parsedProducts;
+      res.json({ message: 'CSV uploaded successfully' });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: 'Error processing CSV' });
+    });
 });
 
 
-app.listen(port, () => console.log(`Node app listening on port ${port}!`));
+app.get('/download',passport.authenticate('roleAdmin',{ session: false }), (req, res) => {
+  if (mobiles.length === 0) {
+    return res.status(404).json({ message: 'No products available for download' });
+  }
+
+  const csvStream = csv.format({ headers: true });
+  csvStream.pipe(res);
+
+  mobiles.forEach((product) => {
+    csvStream.write(product);
+  });
+
+  csvStream.end();
+});
+
+
+
+app.post('/user', function (req, res) {
+  //console.log('Request Body:', req.body);
+    let email = req.body.email;
+    let password = req.body.password;
+    let user = users.find((a) => a.email === email && a.password === password);
+    if (user) {
+        let payload = { id: user.id,clickedUrl: req.originalUrl };
+        let token = jwt.sign(payload, params.secretOrKey, {
+            algorithm: 'HS256',
+            expiresIn: jwtExpirySeconds,
+        });
+        logs.push({
+          userId: user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+        res.send({token:"bearer "+token});
+    } else
+        res.status(404).send('Login Failed');
+});
+
+app.get('/user', passport.authenticate('roleAll',{ session: false }), function (req, res) {
+    logs.push({
+          userId: req.user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+    res.send(req.user);
+});
+app.get('/logs', passport.authenticate('roleAdmin',{ session: false }), function (req, res) {
+    res.json(logs);
+});
+
+app.get('/wishlist', passport.authenticate('roleAll',{ session: false }), function (req, res) {
+  let list = wishlist.find((a) => a.user === req.user.email);
+   logs.push({
+          userId: req.user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+  if (list) {
+    res.json(list);
+  } else {
+    let wish = {
+      user: req.user.email,
+      products: []
+    };
+    res.json(wish);
+  }
+});
+app.post('/wishlist', passport.authenticate('roleAll',{ session: false }), function (req, res) {
+  let  product  = req.body.product;
+  logs.push({
+          userId: req.user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+  if (product) {
+      let ind = wishlist.findIndex((a) => a.user === req.user.email);
+      if (ind>=0) {
+        let findProd = wishlist[ind].products.findIndex((a) => a.id === product.id);
+        if (findProd >= 0) {
+          wishlist[ind].products.splice(findProd, 1);
+        } else {
+          wishlist[ind].products.push(product);
+        }
+      } else {
+        let list = {
+          user: req.user.email,
+          products: [
+            product
+          ]
+        };
+        wishlist.push(list);
+      } 
+      res.json({ message: 'Product added' });
+  } else {
+    res.send('product not found');
+  }
+});
+app.get('/orders', passport.authenticate('roleAll',{ session: false }), function (req, res) {
+  let ord = orders.find((a) => a.user === req.user.email);
+   logs.push({
+          userId: req.user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+  if (ord) {
+    res.json(ord);
+  } else {
+    res.status(401).send({message:'Not found'});
+  }
+});
+app.post('/orders', passport.authenticate('roleAll',{ session: false }), function (req, res) {
+   logs.push({
+          userId: req.user.id,
+          timestamp: new Date(),
+          action: 'URL click',
+          url: req.originalUrl,
+        });
+  let { order } = req.body;
+  let ind = orders.findIndex((a) => a.user === req.user.email);
+  if (ind>=0) {
+    for (let a of orders) {
+      orders[ind].products.push(a);
+    }
+  } else {
+    let list = {
+      user: req.user.email,
+      products: order
+    };
+    orders.push(list);
+  } 
+  res.status(200).json({ message: 'Order added' });
+});
+app.get('/products/:category/:brand?', function (req, res) {
+   let { category, brand } = req.params;
+  let {page,ram,rating,price,sort,q} = req.query;
+  page = page ? page : 1;
+  let filteredProducts = mobiles.filter((a)=>a.category===category);
+  let arr = filteredProducts;
+  if (brand) {
+        arr = mobiles.filter((a) => a.brand === brand);
+  }
+  if (ram) {
+    const conditions = ram.split(',');
+    let fileredArr = arr.filter(product => {
+        return conditions.every(condition => {
+            let [operator, value] = condition.split('=');
+            value = parseInt(value);
+            switch (operator) {
+                case '>=':
+                    return product.ram >= value;
+                case '<=':
+                    return product.ram <= value;
+                default:
+                    return product.ram === value;
+            }
+
+        });
+    });
+    arr = fileredArr;
+  }
+  if (rating) {
+    const ratings = rating.split(',');
+    for (let r of ratings) {
+      //console.log(r);
+      const ratingValue = parseFloat(r[1]);
+       arr = arr.filter(product => product.rating > ratingValue);
+    }
+  }
+  if (price) {
+    const prices = price.split(',');
+    for (let r of prices) {
+      let [min, max] = r.split('-');
+      min = parseInt(min);
+      max = parseInt(max);
+      //console.log(min, max);
+       arr = arr.filter(product => product.price >= min && product.price<=max);
+    }
+  }
+  if (q) {
+  let filteredProducts = arr.filter(product => {
+    return product.name.toLowerCase().includes(q.toLowerCase());
+  });
+  arr = filteredProducts
+}
+  if (sort) {
+    if (sort === 'asc') {
+      arr.sort((a, b) => {
+        return (a.price) - (b.price);
+      });
+    }
+    else if (sort === 'desc') {
+      arr.sort((a, b) => {
+        return (b.price) - (a.price);
+      });
+    }
+    else if (sort === 'popularity') {
+      arr.sort((a, b) => {
+        return (a.popularity) - (b.popularity);
+      });
+    }
+  }
+  let respArr = pagination(arr, page);
+  let len = arr.length;
+  let quo = Math.floor(len / 10);
+  let rem = len % 10;
+  let extra = rem === 0 ? 0 : 1
+  let numofpages = quo + extra;
+  let pageInfo = { pageNumber: page, numberOfPages: numofpages, numOfItems: respArr.length, totalItemCount: arr.length };
+  res.json({
+    pageInfo: pageInfo,
+    mobiles: respArr,
+
+  });
+});
+
+app.get('/deals', (req, res) => {
+
+  const shuffled = mobiles.sort(() => 0.5 - Math.random());
+  const random = shuffled.slice(0, 14);
+  res.json(random);
+});
+app.get('/product/:id', (req, res) => {
+  let { id } = req.params;
+  let prod = mobiles.find((a) => a.id === id);
+  if (prod) {
+    res.json(prod);
+  } else {
+    res.status(401).send({message:'Product not found'});
+  }
+});
+app.post('/product',passport.authenticate('roleAdmin',{ session: false }), (req, res) => {
+  let product = req.body;
+  if (product) {
+    mobiles.push(product);
+    res.json('Product Added!!');
+  } else {
+    res.status(401).send({message:'Product not found'});
+  }
+});
+app.put('/product',passport.authenticate('roleAdmin',{ session: false }), (req, res) => {
+  let product = req.body;
+  let prod = mobiles.findIndex((a) => a.id === product.id);
+  if (prod>=0) {
+    mobiles[prod] = product;
+    res.json('Product Updated!!');
+  } else {
+    res.status(401).send({message:'Product not found'});
+  }
+});
+app.get('/pincode/:code/:id', (req, res) => {
+  let { id, code } = req.params;
+  let prod = pincodes.find((a) => a.pincode === code && a.mobileList.find((b)=>b.id===id));
+  if (prod) {
+    res.json(prod);
+  } else {
+    res.status(401).send({message:'Not Deliverable'});
+  }
+});
+app.get('/reviews/:id', (req, res) => {
+  let { id } = req.params;
+  let prod = reviews.find((a) => a.mobileId === id);
+  if (prod) {
+    res.json(prod);
+  } else {
+    res.status(401).send({message:'No reviews available'});
+  }
+});
+
+function parseCSVData(csvData) {
+  return new Promise((resolve, reject) => {
+    const parsedProducts = [];
+
+    csv.parseString(csvData, { headers: true })
+      .on('data', (row) => {
+        const product = {
+          id: row.id,
+          name: row.name,
+          price: row.price,
+          img: row.img,
+          details: row.details,
+          brand: row.brand,
+          category: row.category,
+          EMI: row.EMI,
+          assured: row.assured,
+          offers: row.offers,
+          rating:row.rating
+        };
+        parsedProducts.push(product);
+      })
+      .on('end', () => resolve(parsedProducts))
+      .on('error', (error) => reject(error));
+  });
+}
+
+function pagination(obj, page) {
+  var resArr = obj;
+  resArr = resArr.slice(page * 10 - 10, page * 10);
+  return resArr;
+}
+
